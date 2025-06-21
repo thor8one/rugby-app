@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau Animé Rugby</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>TCMS Rugby Animation exercice By Raphaël</h1>
+
+    <div class="controls">
+        <button id="addPlayerBtn">Ajouter Joueur</button>
+        <button id="addOpponentBtn">Ajouter Opposant</button>
+        <button id="addBallBtn">Ajouter Ballon</button>
+        <button id="addPostsBtn">Ajouter Poteaux</button>
+        <button id="addConeBtn">Ajouter Plot</button>
+        <button id="addPoleBtn">Ajouter Piquet</button>
+        <button id="addShieldBtn">Ajouter Bouclier</button>
+        <button id="addBoudinBtn">Ajouter Boudin</button>
+        <button id="clearFieldBtn">Effacer Terrain</button>
+        <button id="captureFrameBtn">Capturer Frame</button>
+        <button id="startAnimationBtn">Démarrer Animation</button>
+        <button id="stopAnimationBtn">Arrêter Animation</button>
+        <button id="exportGifBtn">Exporter GIF</button>
+    </div>
+
+    <div id="rugbyField">
+        </div>
+
+    <script src="html2canvas.min.js"></script>
+    <script src="gif.js"></script> <script src="gif.worker.js"></script> <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px; /* Réduit la marge pour plus d'espace sur mobile */
+    background-color: #f0f0f0;
+    overflow-x: hidden; /* Empêche le défilement horizontal */
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.8em; /* Taille de police adaptable */
+}
+
+/* Contrôles des boutons - Utilisation de Flexbox pour une meilleure disposition */
+.controls {
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap; /* Les boutons passent à la ligne si l'espace manque */
+    justify-content: center; /* Centre les boutons */
+    gap: 8px; /* Espace réduit entre les boutons pour économiser de l'espace */
+    padding: 0 5px; /* Petit padding pour éviter de coller les bords */
+}
+
+.controls button {
+    padding: 8px 12px; /* Padding réduit pour des boutons plus petits */
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9em; /* Taille de police légèrement réduite */
+    transition: background-color 0.2s ease;
+    flex-shrink: 0; /* Empêche les boutons de rétrécir trop */
+}
+
+.controls button:hover {
+    background-color: #0056b3;
+}
+
+/* Terrain de Rugby - Adaptation avec des unités relatives et max-width */
+#rugbyField {
+    width: 95vw; /* Occupe 95% de la largeur du viewport */
+    max-width: 900px; /* Ne dépasse pas 900px de large sur les grands écrans */
+    /* Calcul de la hauteur pour maintenir les proportions 900x500 (500/900 = 0.555) */
+    height: calc(95vw * 0.555);
+    max-height: 500px; /* Ne dépasse pas 500px de haut */
+
+    background-color: #7CFC00; /* Vert pelouse */
+    border: 3px solid #6B8E23; /* Bordure légèrement réduite */
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Ombre ajustée */
+    margin-top: 10px; /* Espacement après les contrôles */
+}
+
+/* Lignes du terrain (simplifiées) */
+#rugbyField::before,
+#rugbyField::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    /* Largeur et hauteur des lignes sont désormais relatives au terrain */
+}
+
+/* Ligne de but (en haut et en bas) */
+#rugbyField::before {
+    top: 10%; /* 10% de la hauteur du terrain */
+    left: 0;
+    width: 100%;
+    height: 1px; /* Lignes plus fines */
+}
+#rugbyField::after {
+    bottom: 10%; /* 10% de la hauteur du terrain */
+    left: 0;
+    width: 100%;
+    height: 1px;
+}
+
+/* Lignes des 22 mètres (simplifiées - à ajuster si la proportion de votre terrain change) */
+/* Celles-ci sont basées sur le fait que la hauteur du terrain est fixe.
+   Pour des lignes parfaitement proportionnelles, il faudrait des calculs plus complexes
+   ou des éléments HTML supplémentaires. */
+#rugbyField > div:nth-of-type(1):not(.player):not(.opponent):not(.ball):not(.rugby-posts):not(.training-cone):not(.training-pole):not(.training-shield):not(.training-boudin)::before {
+    top: 30%; /* Position relative à la hauteur du terrain */
+    height: 1px;
+    width: 100%;
+}
+#rugbyField > div:nth-of-type(2):not(.player):not(.opponent):not(.ball):not(.rugby-posts):not(.training-cone):not(.training-pole):not(.training-shield):not(.training-boudin)::before {
+    top: 70%; /* Position relative à la hauteur du terrain */
+    height: 1px;
+    width: 100%;
+}
+
+/* Styles des éléments mobiles (joueurs, opposants, ballon, etc.) */
+/* Les dimensions et tailles de police sont rendues plus petites et/ou relatives */
+.player, .opponent, .ball, .rugby-posts, .training-cone, .training-pole, .training-shield, .training-boudin {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    cursor: grab;
+    user-select: none;
+    box-sizing: border-box;
+    /* Transition pour les mouvements plus fluides lors de l'animation */
+    transition: left 0.1s linear, top 0.1s linear; /* Légère transition pour les mouvements */
+}
+
+.player {
+    width: 25px; /* Taille réduite */
+    height: 25px;
+    border-radius: 50%;
+    background-color: #FF4500;
+    border: 1px solid #CD3700;
+    font-size: 0.7em; /* Taille de police réduite */
+}
+
+.opponent {
+    width: 25px; /* Taille réduite */
+    height: 25px;
+    border-radius: 50%;
+    background-color: #4169E1;
+    border: 1px solid #364F9D;
+    font-size: 0.7em;
+}
+
+.ball {
+    width: 18px; /* Taille réduite */
+    height: 18px;
+    border-radius: 50%;
+    background-color: #A0522D;
+    font-size: 0.6em;
+    border: 1px solid #8B4513;
+}
+
+.rugby-posts {
+    width: 35px; /* Taille réduite */
+    height: 55px;
+    background-color: white;
+    border: 1px solid #555;
+    font-size: 0.6em;
+    color: #333;
+}
+.rugby-posts::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 2px; /* Ligne plus fine */
+    background-color: white;
+    top: 50%;
+    left: 20%;
+    transform: translateY(-50%);
+}
+
+.training-cone {
+    width: 20px; /* Taille réduite */
+    height: 20px;
+    background-color: orange;
+    border-radius: 50%;
+    border: 1px solid darkorange;
+    font-size: 0.5em;
+}
+
+.training-pole {
+    width: 8px; /* Taille réduite */
+    height: 35px;
+    background-color: red;
+    border: 1px solid darkred;
+    font-size: 0.5em;
+}
+
+.training-shield {
+    width: 50px; /* Taille réduite */
+    height: 35px;
+    background-color: rgba(100, 100, 255, 0.5);
+    border: 1px solid rgba(50, 50, 200, 0.8);
+    font-size: 0.6em;
+}
+
+.training-boudin {
+    width: 70px; /* Taille réduite */
+    height: 25px;
+    background-color: #8B4513;
+    border: 1px solid #5A2D0C;
+    border-radius: 12.5px / 50%;
+    font-size: 0.6em;
+}
+
+/* --- Media Queries pour les petits écrans (smartphones) --- */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5em; /* Encore plus petit sur mobile */
+    }
+
+    .controls button {
+        padding: 7px 10px;
+        font-size: 0.8em;
+    }
+
+    #rugbyField {
+        border-width: 2px; /* Bordure encore plus fine */
+    }
+
+    .player, .opponent {
+        width: 20px; /* Joueurs plus petits */
+        height: 20px;
+        font-size: 0.6em;
+    }
+
+    .ball {
+        width: 15px; /* Ajustez la largeur à votre convenance */
+        height: 5px; /* Ajustez la hauteur à votre convenance */
+        border-radius: 50%; /* Donne une forme ovale */
+        font: size 0.5em;
+}
+  
+
+    .rugby-posts {
+        width: 30px; /* Poteaux plus petits */
+        height: 45px;
+        font-size: 0.5em;
+    }
+    .rugby-posts::before {
+        height: 1.5px; /* Ligne du H encore plus fine */
+    }
+
+    .training-cone {
+        width: 18px; /* Plots plus petits */
+        height: 18px;
+        font-size: 0.45em;
+    }
+
+    .training-pole {
+        width: 6px; /* Piquets plus petits */
+        height: 30px;
+        font-size: 0.45em;
+    }
+
+    .training-shield {
+        width: 40px; /* Boucliers plus petits */
+        height: 30px;
+        font-size: 0.5em;
+    }
+
+    .training-boudin {
+        width: 60px; /* Boudins plus petits */
+        height: 20px;
+        border-radius: 10px / 50%;
+        font-size: 0.5em;
+    }
+}
+
+/* Petite optimisation pour les transitions lors de l'animation */
+.player, .opponent, .ball, .rugby-posts, .training-cone, .training-pole, .training-shield, .training-boudin {
+    transition: left 0.1s linear, top 0.1s linear;
+}

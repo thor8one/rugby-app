@@ -1,261 +1,268 @@
-/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
     display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alignement en haut */
+    min-height: 100vh;
+    margin: 0;
+    background-color: #2d2f80;
+    padding: 20px; /* Ajoute un peu de marge autour du contenu */
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px; /* Réduit la marge pour plus d'espace sur mobile */
-    background-color: #f0f0f0;
-    overflow-x: hidden; /* Empêche le défilement horizontal */
+    width: 100%; /* Prend toute la largeur disponible */
+    max-width: 1200px; /* Limite la largeur maximale du contenu principal */
+    gap: 20px; /* Ajoute de l'espace entre les sections (contrôles et terrain) */
 }
 
+/* ... (votre code CSS existant) ... */
+
+/* Ancien style pour h1, nous allons le remplacer ou le modifier */
 h1 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.8em; /* Taille de police adaptable */
+    color: white;
+    /* margin-bottom: 20px; <-- Cette marge sera gérée par le parent */
+    text-align: center; /* On le garde si on veut que le texte soit centré dans son propre espace */
+    margin: 0; /* Important pour enlever les marges par défaut qui pourraient affecter Flexbox */
+    flex-grow: 1; /* Permet au titre de prendre l'espace restant */
 }
 
-/* Contrôles des boutons - Utilisation de Flexbox pour une meilleure disposition */
-.controls {
-    margin-bottom: 15px;
+/* NOUVEAUX STYLES POUR LE CONTENEUR DU TITRE ET DU LOGO */
+.header-content {
+    display: flex; /* Active Flexbox */
+    align-items: center; /* Centre les éléments verticalement sur la même ligne */
+    justify-content: center; /* Centre l'ensemble (logo + titre) horizontalement dans le container parent */
+    gap: 15px; /* Espace entre le logo et le titre */
+    width: 100%; /* S'assure qu'il prend la largeur du container */
+    margin-bottom: 20px; /* Espace sous ce bloc pour les contrôles */
+}
+
+/* NOUVEAUX STYLES POUR LE LOGO (AJUSTÉS) */
+.app-logo {
+    width: 50px; /* Taille plus petite pour un logo à côté du titre */
+    height: auto;
+    margin: 0; /* Enlève les marges qui centrent le logo car maintenant c'est le parent qui gère */
+    flex-shrink: 0; /* Empêche le logo de rétrécir si l'espace est limité */
+}
+
+/* ... (le reste de votre code CSS existant) ... */
+
+.controls-container {
     display: flex;
-    flex-wrap: wrap; /* Les boutons passent à la ligne si l'espace manque */
-    justify-content: center; /* Centre les boutons */
-    gap: 8px; /* Espace réduit entre les boutons pour économiser de l'espace */
-    padding: 0 5px; /* Petit padding pour éviter de coller les bords */
+    flex-wrap: wrap; /* Permet aux sections de passer à la ligne si l'espace est insuffisant */
+    justify-content: center; /* Centre les sections à l'intérieur du conteneur */
+    gap: 10px; /* Espace entre les sections de contrôle */
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%; /* S'assure qu'il prend toute la largeur du .container */
+    box-sizing: border-box; /* Inclure padding et border dans la taille */
 }
 
-.controls button {
-    padding: 8px 12px; /* Padding réduit pour des boutons plus petits */
+.controls-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center; /* **MODIFIÉ** : Centrage des boutons à l'intérieur de la section */
+    align-items: flex-start; /* **MODIFIÉ** : Aligne les éléments en haut de la section */
+    gap: 3px; /* Espace entre les boutons */
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    /* --- MODIFICATIONS CLÉS POUR RÉDUIRE LA TAILLE DES CONTENEURS --- */
+    flex: 0 1 auto; /* **MODIFIÉ** : Ne pas s'étirer, peut rétrécir, prend la taille de son contenu */
+    min-width: 0; /* **AJOUTÉ** : Permet de réduire à 0 si besoin (même si le contenu l'empêche) */
+    max-width: none; /* **MODIFIÉ** : Retire la contrainte de max-width pour que le flex-wrap gère */
+    width: fit-content; /* **AJOUTÉ** : La largeur de la section s'adapte à son contenu */
+    /* --- FIN MODIFICATIONS CLÉS --- */
+    box-sizing: border-box;
+}
+
+.controls-section h2 {
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+    color: #555;
+    font-size: 1.2em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 3px;
+}
+
+button {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
     border: none;
     border-radius: 5px;
     background-color: #007bff;
     color: white;
-    cursor: pointer;
-    font-size: 0.9em; /* Taille de police légèrement réduite */
     transition: background-color 0.2s ease;
-    flex-shrink: 0; /* Empêche les boutons de rétrécir trop */
+    width: auto;
+    min-width: 80px;
+    max-width: 150px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    /* --- AJOUTÉ POUR L'ALIGNEMENT --- */
+    margin: 0; /* Assure qu'il n'y a pas de marges par défaut qui perturbent le gap */
+    /* --- FIN AJOUTÉ --- */
 }
 
-.controls button:hover {
+button:hover {
     background-color: #0056b3;
 }
 
-/* Terrain de Rugby - Adaptation avec des unités relatives et max-width */
-#rugbyField {
-    width: 95vw; /* Occupe 95% de la largeur du viewport */
-    max-width: 900px; /* Ne dépasse pas 900px de large sur les grands écrans */
-    /* Calcul de la hauteur pour maintenir les proportions 900x500 (500/900 = 0.555) */
-    height: calc(95vw * 0.555);
-    max-height: 500px; /* Ne dépasse pas 500px de haut */
-
-    background-color: #7CFC00; /* Vert pelouse */
-    border: 3px solid #6B8E23; /* Bordure légèrement réduite */
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Ombre ajustée */
-    margin-top: 10px; /* Espacement après les contrôles */
+button.clear-button {
+    background-color: #dc3545;
 }
 
-/* Lignes du terrain (simplifiées) */
-#rugbyField::before,
-#rugbyField::after {
-    content: '';
-    position: absolute;
-    background-color: white;
-    /* Largeur et hauteur des lignes sont désormais relatives au terrain */
+button.clear-button:hover {
+    background-color: #c82333;
 }
 
-/* Ligne de but (en haut et en bas) */
-#rugbyField::before {
-    top: 10%; /* 10% de la hauteur du terrain */
-    left: 0;
-    width: 100%;
-    height: 1px; /* Lignes plus fines */
-}
-#rugbyField::after {
-    bottom: 10%; /* 10% de la hauteur du terrain */
-    left: 0;
-    width: 100%;
-    height: 1px;
-}
-
-/* Lignes des 22 mètres (simplifiées - à ajuster si la proportion de votre terrain change) */
-/* Celles-ci sont basées sur le fait que la hauteur du terrain est fixe.
-   Pour des lignes parfaitement proportionnelles, il faudrait des calculs plus complexes
-   ou des éléments HTML supplémentaires. */
-#rugbyField > div:nth-of-type(1):not(.player):not(.opponent):not(.ball):not(.rugby-posts):not(.training-cone):not(.training-pole):not(.training-shield):not(.training-boudin)::before {
-    top: 30%; /* Position relative à la hauteur du terrain */
-    height: 1px;
-    width: 100%;
-}
-#rugbyField > div:nth-of-type(2):not(.player):not(.opponent):not(.ball):not(.rugby-posts):not(.training-cone):not(.training-pole):not(.training-shield):not(.training-boudin)::before {
-    top: 70%; /* Position relative à la hauteur du terrain */
-    height: 1px;
-    width: 100%;
+#rugby-field {
+    width: 1000px; /* Largeur fixe du terrain */
+    height: 600px; /* Hauteur fixe du terrain */
+    background-color: #79c753; /* Couleur verte du terrain */
+    border: 5px solid #5a9b40;
+    position: relative; /* Important pour le positionnement des éléments */
+    overflow: hidden; /* Empêche les éléments de déborder */
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: calc(100vw - 40px); /* Pour qu'il ne dépasse pas la largeur de la fenêtre - padding */
+    max-height: calc(100vh - 300px); /* Ajuster selon l'espace pris par les contrôles */
 }
 
-/* Styles des éléments mobiles (joueurs, opposants, ballon, etc.) */
-/* Les dimensions et tailles de police sont rendues plus petites et/ou relatives */
+/* Styles des éléments déplaçables */
 .player, .opponent, .ball, .rugby-posts, .training-cone, .training-pole, .training-shield, .training-boudin {
     position: absolute;
+    cursor: grab;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     color: white;
-    cursor: grab;
-    user-select: none;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    border-radius: 50%;
     box-sizing: border-box;
-    /* Transition pour les mouvements plus fluides lors de l'animation */
-    transition: left 0.1s linear, top 0.1s linear; /* Légère transition pour les mouvements */
 }
 
 .player {
-    width: 25px; /* Taille réduite */
-    height: 25px;
-    border-radius: 50%;
-    background-color: #FF4500;
-    border: 1px solid #CD3700;
-    font-size: 0.7em; /* Taille de police réduite */
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    border: 2px solid #0056b3;
 }
 
 .opponent {
-    width: 25px; /* Taille réduite */
-    height: 25px;
-    border-radius: 50%;
-    background-color: #4169E1;
-    border: 1px solid #364F9D;
-    font-size: 0.7em;
+    width: 40px;
+    height: 40px;
+    background-color: #dc3545;
+    border: 2px solid #c82333;
 }
 
-.ball {
-    width: 18px; /* Taille réduite */
-    height: 18px;
+/*.ball {
+    width: 30px;
+    height: 30px;
+    background-color: #ffc107;
+    border: 2px solid #e0a800;
     border-radius: 50%;
-    background-color: #A0522D;
-    font-size: 0.6em;
-    border: 1px solid #8B4513;
-}
+    font-size: 0.9em;
+}*/
+ .ball {
+        width: 30px; /* Ajustez la largeur à votre convenance */
+        height: 10px; /* Ajustez la hauteur à votre convenance */
+        border-radius: 60%; /* Donne une forme ovale */
+		background-color: #ffc107;
+    border: 2px solid #e0a800;
+        font: size 0.5em;
+ }
 
 .rugby-posts {
-    width: 35px; /* Taille réduite */
-    height: 55px;
-    background-color: white;
-    border: 1px solid #555;
-    font-size: 0.6em;
-    color: #333;
-}
-.rugby-posts::before {
-    content: '';
-    position: absolute;
-    width: 60%;
-    height: 2px; /* Ligne plus fine */
-    background-color: white;
-    top: 50%;
-    left: 20%;
-    transform: translateY(-50%);
+    width: 80px;
+    height: 80px;
+    background-color: #6c757d;
+    border: 3px solid #545b62;
+    border-radius: 5px;
+    font-size: 0.8em;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .training-cone {
-    width: 20px; /* Taille réduite */
-    height: 20px;
-    background-color: orange;
+    width: 30px;
+    height: 30px;
+    background-color: #fd7e14;
+    border: 2px solid #e66a00;
     border-radius: 50%;
-    border: 1px solid darkorange;
-    font-size: 0.5em;
+    font-size: 0.8em;
 }
 
 .training-pole {
-    width: 8px; /* Taille réduite */
-    height: 35px;
-    background-color: red;
-    border: 1px solid darkred;
-    font-size: 0.5em;
+    width: 20px;
+    height: 50px;
+    background-color: #28a745;
+    border: 2px solid #218838;
+    border-radius: 3px;
+    font-size: 0.8em;
 }
 
 .training-shield {
-    width: 50px; /* Taille réduite */
-    height: 35px;
-    background-color: rgba(100, 100, 255, 0.5);
-    border: 1px solid rgba(50, 50, 200, 0.8);
-    font-size: 0.6em;
+    width: 70px;
+    height: 50px;
+    background-color: #17a2b8;
+    border: 2px solid #138496;
+    border-radius: 5px;
+    font-size: 0.8em;
 }
 
 .training-boudin {
-    width: 70px; /* Taille réduite */
-    height: 25px;
-    background-color: #8B4513;
-    border: 1px solid #5A2D0C;
-    border-radius: 12.5px / 50%;
-    font-size: 0.6em;
+    width: 90px;
+    height: 40px;
+    background-color: #6f42c1;
+    border: 2px solid #5a32a6;
+    border-radius: 20px;
+    font-size: 0.8em;
 }
 
-/* --- Media Queries pour les petits écrans (smartphones) --- */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 1.5em; /* Encore plus petit sur mobile */
-    }
-
-    .controls button {
-        padding: 7px 10px;
-        font-size: 0.8em;
-    }
-
-    #rugbyField {
-        border-width: 2px; /* Bordure encore plus fine */
-    }
-
-    .player, .opponent {
-        width: 20px; /* Joueurs plus petits */
-        height: 20px;
-        font-size: 0.6em;
-    }
-
-    .ball {
-        width: 15px; /* Ajustez la largeur à votre convenance */
-        height: 5px; /* Ajustez la hauteur à votre convenance */
-        border-radius: 50%; /* Donne une forme ovale */
-        font: size 0.5em;
-}
-  
-
-    .rugby-posts {
-        width: 30px; /* Poteaux plus petits */
-        height: 45px;
-        font-size: 0.5em;
-    }
-    .rugby-posts::before {
-        height: 1.5px; /* Ligne du H encore plus fine */
-    }
-
-    .training-cone {
-        width: 18px; /* Plots plus petits */
-        height: 18px;
-        font-size: 0.45em;
-    }
-
-    .training-pole {
-        width: 6px; /* Piquets plus petits */
-        height: 30px;
-        font-size: 0.45em;
-    }
-
-    .training-shield {
-        width: 40px; /* Boucliers plus petits */
-        height: 30px;
-        font-size: 0.5em;
-    }
-
-    .training-boudin {
-        width: 60px; /* Boudins plus petits */
-        height: 20px;
-        border-radius: 10px / 50%;
-        font-size: 0.5em;
-    }
+.player.selected,
+.opponent.selected,
+.ball.selected,
+.rugby-posts.selected,
+.training-cone.selected,
+.training-pole.selected,
+.training-shield.selected,
+.training-boudin.selected {
+    outline: 2px solid rgb(0, 255, 255);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+    z-index: 100;
 }
 
-/* Petite optimisation pour les transitions lors de l'animation */
-.player, .opponent, .ball, .rugby-posts, .training-cone, .training-pole, .training-shield, .training-boudin {
-    transition: left 0.1s linear, top 0.1s linear;
+.delete-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 101;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: darkred;
 }

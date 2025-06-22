@@ -3,32 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau Animé Rugby</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <title>Tableau noir Rugby</title>
+    <link rel="stylesheet" href="style.css"> </head>
 <body>
-    <h1>TCMS Rugby Animation exercice By Raphaël</h1>
+    <div class="container">
+        <h1>TCMS Rugby</h1>
+		<img src="images\logo.jpg" alt="Logo du TCMS Rugby" class="app-logo">
 
-    <div class="controls">
-        <button id="addPlayerBtn">Ajouter Joueur</button>
-        <button id="addOpponentBtn">Ajouter Opposant</button>
-        <button id="addBallBtn">Ajouter Ballon</button>
-        <button id="addPostsBtn">Ajouter Poteaux</button>
-        <button id="addConeBtn">Ajouter Plot</button>
-        <button id="addPoleBtn">Ajouter Piquet</button>
-        <button id="addShieldBtn">Ajouter Bouclier</button>
-        <button id="addBoudinBtn">Ajouter Boudin</button>
-        <button id="clearFieldBtn">Effacer Terrain</button>
-        <button id="captureFrameBtn">Capturer Frame</button>
-        <button id="startAnimationBtn">Démarrer Animation</button>
-        <button id="stopAnimationBtn">Arrêter Animation</button>
-        <button id="exportGifBtn">Exporter GIF</button>
-    </div>
+        <div class="controls-container">
+            <div class="controls-section">
+                <h2>Ajouter des Éléments</h2>
+                <button id="addPlayer">Ajouter Joueur</button>
+                <button id="addOpponent">Ajouter Opposant</button>
+                <button id="addBall">Ajouter Ballon</button>
+                <button id="addPosts">Ajouter Poteaux</button>
+                <button id="addCone">Ajouter Plot</button>
+                <button id="addPole">Ajouter Piquet</button>
+                <button id="addShield">Ajouter Bouclier</button>
+                <button id="addBoudin">Ajouter Boudin</button>
+                <button id="clearField" class="clear-button">Vider le terrain</button>
+            </div>
 
-    <div id="rugbyField">
+            <div class="controls-section">
+                <h2>Animation & Export</h2>
+                <button id="captureFrame">Capturer Frame</button>
+                <button id="startAnimation">Start Animation</button>
+                <button id="stopAnimation">Stop Animation</button>
+                <button id="exportGif">Exporter GIF</button>
+            </div>
         </div>
 
-    <script src="html2canvas.min.js"></script>
-    <script src="gif.js"></script> <script src="gif.worker.js"></script> <script src="script.js"></script>
+        <div id="rugby-field">
+            </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/gif.js@0.2.0/dist/gif.js"></script>
+    <script src="gif.worker.js"></script> 
+
+    <script src="script.js"></script>
 </body>
 </html>

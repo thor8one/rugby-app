@@ -474,7 +474,7 @@ function stopAnimation() {
     alert("Génération du GIF en cours... Cela peut prendre un certain temps.");
     addFrameToGif(0);
 }*/
-async function exportGif() {
+/*async function exportGif() {
     if (animationFrames.length < 2) {
         alert("Veuillez capturer au moins 2 'frames' pour exporter l'animation.");
         return;
@@ -558,7 +558,161 @@ async function exportGif() {
 
     gif.render(); // Démarre le processus de rendu du GIF
 }
+*/
+function exportGif() {
+    if (animationFrames.length === 0) {
+        alert("Capturez des frames avant d'exporter le GIF.");
+        return;
+    }
 
+    // --- DIMENSIONS CIBLES POUR LE GIF ---
+    const targetGifWidth = 1000; // Largeur désirée du GIF
+    const targetGifHeight = 600; // Hauteur désirée du GIF
+    // --- FIN DIMENSIONS CIBLES ---
+
+    // Sauvegarder les styles actuels du terrain pour les restaurer après la capture
+    const originalFieldStyle = {
+        width: rugbyField.style.width,
+        height: rugbyField.style.height,
+        maxWidth: rugbyField.style.maxWidth,
+        aspectRatio: rugbyField.style.aspectRatio
+    };
+
+    // Temporairement, définir les dimensions fixes du terrain pour la capture
+    // On désactive aussi le max-width et l'aspect-ratio pour que les dimensions fixes soient prioritaires
+    rugbyField.style.width = `${targetGifWidth}px`;
+    rugbyField.style.height = `${targetGifHeight}px`;
+    rugbyField.style.maxWidth = 'none'; // Important pour ne pas limiter la largeur fixe
+    rugbyField.style.aspectRatio = 'auto'; // Important pour ne pas forcer un ratio pendant la taille fixe
+
+    // Assurez-vous que tous les éléments enfants aussi prennent leur taille en pixels
+    // et leurs positions en pixels si nécessaire, sinon ils apparaîtront minuscules ou décalés.
+    // Cette partie est cruciale car vos éléments sont en pourcentages.
+    // Nous devons convertir leur position et taille en pixels temporairement.
+
+    const elementsToRestore = [];
+    document.querySelectorAll('#rugby-field > div:not(.delete-button)').forEach(element => {
+        const currentLeftPercent = parseFloat(element.style.left);
+        const currentTopPercent = parseFloat(element.style.top);
+        const currentWidthPercent = parseFloat(element.style.width); // Récupérer la taille actuelle en %
+        const currentHeightPercent = parseFloat(element.style.height); // Récupérer la taille actuelle en %
+
+        // Sauvegarder les styles originaux en pourcentage
+        elementsToRestore.push({
+            element: element,
+            originalLeft: element.style.left,
+            originalTop: element.style.top,
+            originalWidth: element.style.width,
+            originalHeight: element.style.height,
+            originalAspectRatio: element.style.aspectRatio,
+            originalFontSize: element.style.fontSize
+        });
+
+        // Convertir les positions et tailles en pixels absolus pour la capture
+        // La taille des éléments doit être proportionnelle aux 1000x600 du terrain
+        element.style.left = `${(currentLeftPercent / 100) * targetGifWidth}px`;
+        element.style.top = `${(currentTopPercent / 100) * targetGifHeight}px`;
+        
+        // Convertir les largeurs/hauteurs % en pixels pour les dimensions cibles du GIF
+        element.style.width = `${(currentWidthPercent / 100) * targetGifWidth}px`;
+        element.style.height = 'auto'; // La hauteur sera gérée par l'aspect-ratio CSS initial
+        element.style.aspectRatio = element.dataset.originalAspectRatio || '1'; // S'assurer que le ratio est conservé si défini en CSS
+        // Ajuster la taille de la police pour qu'elle soit lisible sur le GIF 1000x600
+        // Par exemple, si 0.7em est bien pour 300px, 1.4em sera bien pour 600px, etc.
+        const originalFontSizePx = parseFloat(window.getComputedStyle(element).fontSize);
+        element.style.fontSize = `${(originalFontSizePx / rugbyField.offsetWidth) * targetGifWidth}px`;
+        // OU, une valeur fixe si vous voulez que la police soit toujours de la même taille sur le GIF
+        // element.style.fontSize = `1em`; // Ajustez cette valeur si besoin
+    });
+
+    // Initialiser GIF.js avec les dimensions cibles
+    const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        workerScript: 'gif.worker.js',
+        width: targetGifWidth, // C'est la largeur que le GIF aura
+        height: targetGifHeight, // C'est la hauteur que le GIF aura
+        transparent: '#000000'
+    });
+
+    const addFrameToGif = (frameIndex) => {
+        if (frameIndex >= animationFrames.length) {
+            gif.render();
+            return;
+        }
+
+        applyFrame(animationFrames[frameIndex]); // Applique la frame. Les éléments sont déjà en pixels pour la capture.
+
+        html2canvas(rugbyField, {
+            backgroundColor: null,
+            useCORS: true,
+            allowTaint: true,
+            // Capture à la taille définie temporairement par le JS
+            width: targetGifWidth,
+            height: targetGifHeight,
+            scale: 1 // Capture à l'échelle 1:1 de la taille définie
+        }).then(canvas => {
+            if (canvas.width > 0 && canvas.height > 0) {
+                gif.addFrame(canvas.getContext('2d'), { delay: 500 });
+                console.log(`Frame ${frameIndex} ajoutée au GIF (taille: ${canvas.width}x${canvas.height}).`);
+            } else {
+                console.warn(`Canvas vide ou invalide pour la frame ${frameIndex}. Largeur: ${canvas.width}, Hauteur: ${canvas.height}`);
+            }
+            addFrameToGif(frameIndex + 1);
+        }).catch(error => {
+            console.error("Erreur lors de la capture de la frame pour le GIF:", error);
+            alert("Erreur lors de la capture d'une frame pour le GIF. Vérifiez la console.");
+            gif.abort();
+            // Assurez-vous de restaurer les styles en cas d'erreur aussi
+            restoreOriginalStyles();
+        });
+    };
+
+    // Fonction pour restaurer les styles d'origine
+    const restoreOriginalStyles = () => {
+        // Restaurer les styles du terrain
+        rugbyField.style.width = originalFieldStyle.width;
+        rugbyField.style.height = originalFieldStyle.height;
+        rugbyField.style.maxWidth = originalFieldStyle.maxWidth;
+        rugbyField.style.aspectRatio = originalFieldStyle.aspectRatio;
+
+        // Restaurer les styles de chaque élément
+        elementsToRestore.forEach(data => {
+            data.element.style.left = data.originalLeft;
+            data.element.style.top = data.originalTop;
+            data.element.style.width = data.originalWidth;
+            data.element.style.height = data.originalHeight;
+            data.element.style.aspectRatio = data.originalAspectRatio;
+            data.element.style.fontSize = data.originalFontSize;
+        });
+    };
+
+    gif.on('finished', (blob) => {
+        restoreOriginalStyles(); // Restaurer les styles une fois le GIF généré
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'animation_rugby.gif';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("GIF généré et téléchargement démarré !");
+    });
+
+    gif.on('progress', (p) => {
+        console.log(`Progression du GIF : ${Math.round(p * 100)}%`);
+    });
+
+    gif.on('error', (error) => {
+        console.error("Erreur GIF.js:", error);
+        alert("Une erreur est survenue lors de la génération du GIF. Vérifiez la console.");
+        restoreOriginalStyles(); // Restaurer les styles en cas d'erreur
+    });
+
+    alert("Génération du GIF en cours... Cela peut prendre un certain temps.");
+    addFrameToGif(0);
+}
 // --- Fonction pour effacer tous les éléments du terrain ---
 function clearField() {
     rugbyField.innerHTML = '';

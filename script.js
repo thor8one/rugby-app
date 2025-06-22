@@ -404,7 +404,7 @@ function stopAnimation() {
     alert("Génération du GIF en cours... Cela peut prendre un certain temps.");
     addFrameToGif(0); // Démarre le processus d'ajout de frames
 }*/
-function exportGif() {
+/*function exportGif() {
     if (animationFrames.length === 0) {
         alert("Capturez des frames avant d'exporter le GIF.");
         return;
@@ -473,6 +473,90 @@ function exportGif() {
 
     alert("Génération du GIF en cours... Cela peut prendre un certain temps.");
     addFrameToGif(0);
+}*/
+async function exportGif() {
+    if (animationFrames.length < 2) {
+        alert("Veuillez capturer au moins 2 'frames' pour exporter l'animation.");
+        return;
+    }
+
+    exportGifBtn.disabled = true;
+    exportGifBtn.textContent = 'Génération GIF...';
+
+    const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        workerScript: 'gif.worker.js', // Assurez-vous que le chemin est correct ici
+        width: rugbyField.offsetWidth,
+        height: rugbyField.offsetHeight,
+        transparent: '#7CFC00' // Si vous voulez rendre la couleur du terrain transparente (optionnel)
+    });
+
+    console.log("Démarrage de l'exportation GIF...");
+
+    const animationSpeed = 500; // Doit correspondre à la vitesse définie dans startAnimation
+
+    // S'assurer que le terrain est prêt et que les éléments sont recréés à partir de la première frame
+    try {
+        await startAnimation(true); // Re-initialise le terrain et met les éléments à la frame 0
+    } catch (error) {
+        console.error("Erreur lors de la préparation de l'animation pour l'export:", error);
+        exportGifBtn.disabled = false;
+        exportGifBtn.textContent = 'Exporter GIF';
+        return;
+    }
+
+    let promises = [];
+    for (let i = 0; i < animationFrames.length; i++) {
+        // Appliquer la frame
+        applyFrame(animationFrames[i]);
+
+        // Délai pour que le rendu se fasse AVANT la capture
+        // Ce setTimeout est critique pour laisser le navigateur rendre les éléments à leurs nouvelles positions
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        // Capturer le canvas après que la frame soit appliquée et rendue
+        const promise = html2canvas(rugbyField, {
+            scale: 1, // Capture à la taille réelle
+            useCORS: true // Nécessaire si vous avez des images d'autres origines
+        }).then(canvas => {
+            gif.addFrame(canvas.getContext('2d'), { delay: animationSpeed }); // Ajoute la frame avec le délai
+            console.log(`Frame ${i + 1}/${animationFrames.length} capturée pour GIF.`);
+        }).catch(err => {
+            console.error(`Erreur de capture de frame ${i} pour GIF:`, err);
+        });
+        promises.push(promise);
+    }
+
+    await Promise.all(promises); // Attend que toutes les captures soient terminées
+
+    gif.on('finished', function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'animation_rugby.gif';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url); // Libère la mémoire
+
+        exportGifBtn.disabled = false;
+        exportGifBtn.textContent = 'Exporter GIF';
+        console.log("GIF exporté avec succès !");
+    });
+
+    gif.on('progress', function(p) {
+        exportGifBtn.textContent = `Génération GIF... ${(p * 100).toFixed(0)}%`;
+    });
+
+    gif.on('error', function(err) {
+        console.error("Erreur lors de la génération du GIF:", err);
+        alert("Une erreur est survenue lors de l'exportation du GIF. Vérifiez la console pour plus de détails.");
+        exportGifBtn.disabled = false;
+        exportGifBtn.textContent = 'Exporter GIF';
+    });
+
+    gif.render(); // Démarre le processus de rendu du GIF
 }
 
 // --- Fonction pour effacer tous les éléments du terrain ---

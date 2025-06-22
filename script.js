@@ -349,7 +349,7 @@ function stopAnimation() {
     console.log("Animation arrêtée.");
 }
 
-function exportGif() {
+/*function exportGif() {
     if (animationFrames.length === 0) {
         alert("Capturez des frames avant d'exporter le GIF.");
         return;
@@ -403,6 +403,76 @@ function exportGif() {
 
     alert("Génération du GIF en cours... Cela peut prendre un certain temps.");
     addFrameToGif(0); // Démarre le processus d'ajout de frames
+}*/
+function exportGif() {
+    if (animationFrames.length === 0) {
+        alert("Capturez des frames avant d'exporter le GIF.");
+        return;
+    }
+
+    const gifWidth = rugbyField.offsetWidth; 
+    const gifHeight = rugbyField.offsetHeight;
+
+    const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        workerScript: 'gif.worker.js',
+        width: gifWidth,
+        height: gifHeight,
+        transparent: '#000000'
+    });
+
+    const addFrameToGif = (frameIndex) => {
+        if (frameIndex >= animationFrames.length) {
+            gif.render();
+            return;
+        }
+
+        applyFrame(animationFrames[frameIndex]);
+
+        html2canvas(rugbyField, {
+            backgroundColor: null,
+            useCORS: true,
+            allowTaint: true,
+        }).then(canvas => {
+            if (canvas.width > 0 && canvas.height > 0) {
+                gif.addFrame(canvas.getContext('2d'), { delay: 500 });
+            } else {
+                console.warn("Canvas vide ou invalide pour la frame " + frameIndex + ". Largeur:", canvas.width, "Hauteur:", canvas.height);
+            }
+            addFrameToGif(frameIndex + 1);
+        }).catch(error => {
+            console.error("Erreur lors de la capture de la frame pour le GIF:", error);
+            alert("Erreur lors de la capture d'une frame pour le GIF. Vérifiez la console.");
+            gif.abort(); 
+        });
+    };
+
+    // --- MODIFICATION ICI : REMPLACEZ CETTE SECTION ---
+    gif.on('finished', (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'animation_rugby.gif'; // Nom du fichier lors du téléchargement
+        document.body.appendChild(a); // Ajoute le lien au DOM (nécessaire pour simuler un clic)
+        a.click(); // Simule un clic sur le lien
+        document.body.removeChild(a); // Supprime le lien du DOM après le clic
+        URL.revokeObjectURL(url); // Libère la mémoire
+        alert("GIF généré et téléchargement démarré !");
+    });
+    // --- FIN DE LA MODIFICATION ---
+
+    gif.on('progress', (p) => {
+        console.log(`Progression du GIF : ${Math.round(p * 100)}%`);
+    });
+
+    gif.on('error', (error) => {
+        console.error("Erreur GIF.js:", error);
+        alert("Une erreur est survenue lors de la génération du GIF. Vérifiez la console.");
+    });
+
+    alert("Génération du GIF en cours... Cela peut prendre un certain temps.");
+    addFrameToGif(0);
 }
 
 // --- Fonction pour effacer tous les éléments du terrain ---

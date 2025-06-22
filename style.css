@@ -6,30 +6,30 @@ body {
     min-height: 100vh;
     margin: 0;
     background-color: #2d2f80;
-    padding: 10px; /* **MODIFIÉ**: Moins de padding sur les côtés pour les petits écrans */
+    padding: 5px; /* **MODIFIÉ**: Très peu de padding sur les côtés pour les petits écrans */
     box-sizing: border-box;
-    overflow-x: hidden; /* **AJOUTÉ**: Empêche le défilement horizontal indésirable */
+    overflow-x: hidden;
 }
 
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%; /* Prend toute la largeur disponible */
-    max-width: 1200px; /* Limite la largeur maximale du contenu principal */
-    gap: 15px; /* **MODIFIÉ**: Espace réduit entre les sections */
-    padding: 0; /* **AJOUTÉ**: Pas de padding interne au container */
+    width: 100%;
+    max-width: 1200px;
+    gap: 10px; /* **MODIFIÉ**: Espace réduit entre les sections */
+    padding: 0;
 }
 
 h1 {
-    color: #white;
-    margin: 0; /* **MODIFIÉ**: Plus de marge en haut/bas par défaut */
+    color: white;
+    margin: 0;
     text-align: center;
-    font-size: 1.8em; /* **AJOUTÉ**: Taille de titre adaptable */
+    font-size: 1.5em; /* **MODIFIÉ**: Taille de titre plus petite pour mobile */
 }
 
 .app-logo {
-    width: 50px;
+    width: 40px; /* **MODIFIÉ**: Logo légèrement plus petit */
     height: auto;
     margin: 0;
     flex-shrink: 0;
@@ -39,21 +39,21 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* **MODIFIÉ**: Espace réduit entre logo et titre */
+    gap: 8px; /* **MODIFIÉ**: Espace réduit entre logo et titre */
     width: 100%;
-    margin-bottom: 15px; /* **MODIFIÉ**: Espace sous ce bloc */
-    padding: 5px 0; /* **AJOUTÉ**: Un peu de padding vertical pour le contenu de l'entête */
+    margin-bottom: 10px; /* **MODIFIÉ**: Espace sous ce bloc */
+    padding: 5px 0;
 }
 
 .controls-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px; /* **MODIFIÉ**: Espace entre les sections de contrôle */
-    padding: 10px; /* **MODIFIÉ**: Moins de padding */
+    gap: 10px; /* **MODIFIÉ**: Espace réduit entre les sections de contrôle */
+    padding: 5px; /* **MODIFIÉ**: Moins de padding autour du conteneur global des contrôles */
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* **MODIFIÉ**: Ombre plus légère */
     width: 100%;
     box-sizing: border-box;
 }
@@ -64,15 +64,16 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start;
-    gap: 8px; /* **MODIFIÉ**: Espace réduit entre les boutons */
-    padding: 10px; /* **MODIFIÉ**: Moins de padding */
+    gap: 6px; /* **MODIFIÉ**: Espace très réduit entre les boutons */
+    padding: 8px; /* **MODIFIÉ**: Padding réduit autour de chaque section */
     border: 1px solid #eee;
     border-radius: 5px;
-    /* --- MODIFICATIONS CLÉS POUR RÉACTIVITÉ --- */
-    flex: 1 1 100%; /* **MODIFIÉ**: Par défaut, chaque section prend 100% de la largeur du parent */
-    min-width: 0;
+    /* --- MODIFICATIONS CLÉS POUR RÉACTIVITÉ DES SECTIONS --- */
+    /* flex: 1 1 100%; */ /* **SUPPRIMÉ**: On ne veut plus qu'elles prennent 100% par défaut */
+    flex: 1 1 45%; /* **AJOUTÉ**: Chaque section tente de prendre 45% de la largeur, permettant 2 colonnes */
+    min-width: 140px; /* **AJOUTÉ**: Largeur minimale pour éviter qu'une section ne devienne illisible */
     max-width: none;
-    width: auto; /* **MODIFIÉ**: `auto` est souvent plus flexible que `fit-content` pour la réactivité ici */
+    width: auto;
     /* --- FIN MODIFICATIONS CLÉS --- */
     box-sizing: border-box;
 }
@@ -82,24 +83,24 @@ h1 {
     text-align: center;
     margin-top: 0;
     color: #555;
-    font-size: 1.1em; /* **MODIFIÉ**: Taille de titre de section légèrement plus petite */
+    font-size: 0.95em; /* **MODIFIÉ**: Taille de titre de section encore plus petite */
     border-bottom: 1px solid #eee;
-    padding-bottom: 5px; /* **MODIFIÉ**: Moins de padding */
-    margin-bottom: 8px; /* **MODIFIÉ**: Moins de marge */
+    padding-bottom: 4px; /* **MODIFIÉ**: Moins de padding */
+    margin-bottom: 6px; /* **MODIFIÉ**: Moins de marge */
 }
 
 button {
-    padding: 7px 10px; /* **MODIFIÉ**: Padding encore plus réduit */
-    font-size: 0.85em; /* **MODIFIÉ**: Taille de police encore plus réduite */
+    padding: 6px 9px; /* **MODIFIÉ**: Padding encore plus réduit */
+    font-size: 0.8em; /* **MODIFIÉ**: Taille de police réduite */
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px; /* **MODIFIÉ**: Bords légèrement moins arrondis */
     background-color: #007bff;
     color: white;
     transition: background-color 0.2s ease;
     width: auto;
-    min-width: 70px; /* **MODIFIÉ**: Largeur minimale réduite */
-    max-width: 120px; /* **MODIFIÉ**: Largeur maximale réduite */
+    min-width: 60px; /* **MODIFIÉ**: Largeur minimale réduite */
+    max-width: 100px; /* **MODIFIÉ**: Largeur maximale réduite */
     box-sizing: border-box;
     flex-shrink: 0;
     margin: 0;
@@ -118,19 +119,16 @@ button.clear-button:hover {
 }
 
 #rugby-field {
-    /* --- MODIFICATIONS CLÉS POUR LA RÉACTIVITÉ DU TERRAIN --- */
-    width: 95%; /* **MODIFIÉ**: Le terrain prendra 95% de la largeur du conteneur parent */
-    max-width: 1000px; /* **CONSERVÉ**: Max largeur pour les grands écrans */
-    height: auto; /* **MODIFIÉ**: La hauteur s'adaptera automatiquement */
-    aspect-ratio: 1000 / 600; /* **AJOUTÉ**: Maintient le ratio 1000x600 (5:3) */
-    /* --- FIN MODIFICATIONS CLÉS --- */
+    width: 95%;
+    max-width: 1000px;
+    height: auto;
+    aspect-ratio: 1000 / 600;
     background-color: #79c753;
     border: 5px solid #5a9b40;
     position: relative;
     overflow: hidden;
     border-radius: 10px;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-    /* Les max-width/height sur calc sont retirés car gérés par width: 95% et aspect-ratio */
 }
 
 /* Styles des éléments déplaçables (inchangés ou peu modifiés) */
@@ -146,20 +144,19 @@ button.clear-button:hover {
     z-index: 10;
     border-radius: 50%;
     box-sizing: border-box;
-    /* AJOUTÉ: Pour redimensionner les éléments par rapport au terrain */
-    font-size: 0.7em; /* Taille de police par défaut */
+    font-size: 0.7em;
 }
 
 .player {
-    width: 4%; /* **MODIFIÉ**: Taille relative au terrain */
-    height: auto; /* Hauteur relative pour maintenir le ratio */
-    aspect-ratio: 1; /* Maintient le joueur rond */
+    width: 4%;
+    height: auto;
+    aspect-ratio: 1;
     background-color: #007bff;
     border: 2px solid #0056b3;
 }
 
 .opponent {
-    width: 4%; /* **MODIFIÉ**: Taille relative au terrain */
+    width: 4%;
     height: auto;
     aspect-ratio: 1;
     background-color: #dc3545;
@@ -167,17 +164,17 @@ button.clear-button:hover {
 }
 
 .ball {
-    width: 3%; /* **MODIFIÉ**: Taille relative au terrain */
+    width: 3%;
     height: auto;
     aspect-ratio: 1;
     background-color: #ffc107;
     border: 2px solid #e0a800;
     border-radius: 50%;
-    font-size: 0.8em; /* Légèrement plus petit */
+    font-size: 0.8em;
 }
 
 .rugby-posts {
-    width: 8%; /* **MODIFIÉ**: Taille relative au terrain */
+    width: 8%;
     height: auto;
     aspect-ratio: 1;
     background-color: #6c757d;
@@ -189,7 +186,7 @@ button.clear-button:hover {
 }
 
 .training-cone {
-    width: 3%; /* **MODIFIÉ**: Taille relative au terrain */
+    width: 3%;
     height: auto;
     aspect-ratio: 1;
     background-color: #fd7e14;
@@ -199,9 +196,9 @@ button.clear-button:hover {
 }
 
 .training-pole {
-    width: 2%; /* **MODIFIÉ**: Taille relative au terrain */
-    height: auto; /* Hauteur relative au terrain mais un aspect ratio de 1:2.5 */
-    aspect-ratio: 1 / 2.5; /* Largeur:Hauteur */
+    width: 2%;
+    height: auto;
+    aspect-ratio: 1 / 2.5;
     background-color: #28a745;
     border: 2px solid #218838;
     border-radius: 3px;
@@ -209,9 +206,9 @@ button.clear-button:hover {
 }
 
 .training-shield {
-    width: 7%; /* **MODIFIÉ**: Taille relative au terrain */
+    width: 7%;
     height: auto;
-    aspect-ratio: 7 / 5; /* Largeur:Hauteur 70/50 */
+    aspect-ratio: 7 / 5;
     background-color: #17a2b8;
     border: 2px solid #138496;
     border-radius: 5px;
@@ -219,9 +216,9 @@ button.clear-button:hover {
 }
 
 .training-boudin {
-    width: 9%; /* **MODIFIÉ**: Taille relative au terrain */
+    width: 9%;
     height: auto;
-    aspect-ratio: 9 / 4; /* Largeur:Hauteur 90/40 */
+    aspect-ratio: 9 / 4;
     background-color: #6f42c1;
     border: 2px solid #5a32a6;
     border-radius: 20px;
@@ -266,22 +263,21 @@ button.clear-button:hover {
 }
 
 /* --- MEDIA QUERIES POUR LES GRANDS ÉCRANS --- */
-/* Ces styles s'appliqueront quand l'écran est plus large que 768px (tablettes et ordinateurs) */
 @media (min-width: 768px) {
     body {
-        padding: 20px; /* Plus de padding sur les côtés pour les grands écrans */
+        padding: 20px;
     }
 
     h1 {
-        font-size: 2.5em; /* Taille de titre plus grande */
+        font-size: 2.5em;
     }
 
     .app-logo {
-        width: 70px; /* Plus grand logo */
+        width: 70px;
     }
 
     .header-content {
-        gap: 15px; /* Plus d'espace entre logo et titre */
+        gap: 15px;
         margin-bottom: 20px;
     }
 
@@ -291,8 +287,8 @@ button.clear-button:hover {
     }
 
     .controls-section {
-        flex: 1 1 auto; /* Permet aux sections de s'étirer si l'espace est disponible */
-        min-width: 280px; /* Retour à la min-width pour éviter qu'elles ne soient trop petites */
+        flex: 1 1 auto; /* Retourne au comportement "grow/shrink" standard pour les sections */
+        min-width: 280px; /* Retour à la min-width plus grande */
         max-width: 450px; /* Retour à la max-width pour des sections équilibrées */
         justify-content: center; /* Centrer les boutons sur les grands écrans */
         padding: 15px;
@@ -300,34 +296,34 @@ button.clear-button:hover {
     }
 
     .controls-section h2 {
-        font-size: 1.2em; /* Retour à la taille de titre normale */
+        font-size: 1.2em;
         padding-bottom: 8px;
         margin-bottom: 12px;
     }
 
     button {
-        padding: 10px 15px; /* Boutons plus grands */
-        font-size: 1em; /* Taille de police normale */
+        padding: 10px 15px;
+        font-size: 1em;
         min-width: 80px;
         max-width: 150px;
     }
 
     #rugby-field {
-        width: 1000px; /* Largeur fixe pour les grands écrans */
-        height: 600px; /* Hauteur fixe pour les grands écrans */
-        aspect-ratio: auto; /* Désactive l'aspect-ratio pour retrouver les dimensions fixes */
+        width: 1000px;
+        height: 600px;
+        aspect-ratio: auto;
     }
     
-    /* Retour aux tailles fixes pour les éléments sur les grands écrans */
     .player, .opponent {
         width: 40px;
         height: 40px;
-        font-size: 1em; /* Taille de police normale */
+        font-size: 1em;
     }
     .ball {
         width: 30px;
-        height: 30px;
+        height: 20px;
         font-size: 0.9em;
+		border-radius: 50%; /* Donne une forme ovale */
     }
     .rugby-posts {
         width: 80px;

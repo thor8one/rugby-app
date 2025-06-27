@@ -2,7 +2,6 @@ const rugbyField = document.getElementById('rugby-field');
 const addPlayerBtn = document.getElementById('addPlayer');
 const addOpponentBtn = document.getElementById('addOpponent');
 const addBallBtn = document.getElementById('addBall');
-const addPostsBtn = document.getElementById('addPosts');
 const addConeBtn = document.getElementById('addCone');
 const addPoleBtn = document.getElementById('addPole');
 const addShieldBtn = document.getElementById('addShield');
@@ -24,7 +23,6 @@ let offsetY_percent;
 let players = [];
 let opponents = [];
 let ball = null; // Un seul ballon
-let rugbyPosts = null; // Un seul ensemble de poteaux
 let cones = [];
 let poles = [];
 let shields = [];
@@ -124,8 +122,6 @@ function deleteSelectedElement() {
             opponents = opponents.filter(o => o.id !== elementId);
         } else if (elementId === 'ball') {
             ball = null;
-        } else if (elementId === 'rugbyPosts') {
-            rugbyPosts = null;
         } else if (elementId.startsWith('cone')) {
             cones = cones.filter(c => c.id !== elementId);
         } else if (elementId.startsWith('pole')) {
@@ -150,7 +146,6 @@ function addDraggableElement(type, text = '', initialLeft = 50, initialTop = 50)
     if (type === 'player') { id = `player-${playerCounter++}`; players.push(element); }
     else if (type === 'opponent') { id = `opponent-${opponentCounter++}`; opponents.push(element); }
     else if (type === 'ball') { id = 'ball'; ball = element; }
-    else if (type === 'rugby-posts') { id = 'rugbyPosts'; rugbyPosts = element; }
     else if (type === 'training-cone') { id = `cone-${coneCounter++}`; cones.push(element); }
     else if (type === 'training-pole') { id = `pole-${poleCounter++}`; poles.push(element); }
     else if (type === 'training-shield') { id = `shield-${shieldCounter++}`; shields.push(element); }
@@ -719,7 +714,6 @@ function clearField() {
     players = [];
     opponents = [];
     ball = null;
-    rugbyPosts = null;
     cones = [];
     poles = [];
     shields = [];
@@ -742,7 +736,6 @@ function clearField() {
 addPlayerBtn.addEventListener('click', () => addDraggableElement('player', `P${playerCounter}`));
 addOpponentBtn.addEventListener('click', () => addDraggableElement('opponent', `O${opponentCounter}`));
 addBallBtn.addEventListener('click', () => { if (!ball) addDraggableElement('ball', 'B'); });
-addPostsBtn.addEventListener('click', () => { if (!rugbyPosts) addDraggableElement('rugby-posts', 'Poteaux'); });
 addConeBtn.addEventListener('click', () => addDraggableElement('training-cone', `C${coneCounter}`));
 addPoleBtn.addEventListener('click', () => addDraggableElement('training-pole', `Pi${poleCounter}`));
 addShieldBtn.addEventListener('click', () => addDraggableElement('training-shield', `Bouclier${shieldCounter}`));
